@@ -1,4 +1,4 @@
-package com.mb.rest.webservices.currencyconversionservice;
+package com.mb.rest.webservices.currencyconversionservice.conversion;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
