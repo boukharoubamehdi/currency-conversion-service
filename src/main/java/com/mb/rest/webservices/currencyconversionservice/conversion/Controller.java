@@ -19,6 +19,37 @@ public class Controller {
   // both methods (calculateConvertCurrencyRESTemplate & calculateConvertCurrencyFeign).
   // the method (calculateConvertCurrencyRESTemplate) is using direct call using REST Template and
   // the method (calculateConvertCurrencyFeign) is using direct call using Feign
+
+  // after dockerizing the service:
+
+  // The currency-conversion URL, the direct one, failed and the currency-conversion-feign URL
+  // succeeds,
+
+  // The currency-conversion-feign goes through Eureka. So, it's able to discover the service
+  // Currency Exchange
+  // The currency-conversion URL, the direct one
+  // using the proxy "/currency-conversion/from/{from}/to/{to}/quantity/{quantity}",
+  // Why?
+  // So, "/currency-conversion-feign/from/{from}/to/{to}/quantity/{quantity}"
+  // this is where we have the currency-conversion.
+  // The other one is currency-conversion-feign.
+  // This is working because this is going to the proxy and this uses Eureka.
+
+  // However, the currency-conversion one
+  // "/currency-conversion/from/{from}/to/{to}/quantity/{quantity}",
+  // what happens?
+  // We are directly calling localhost:8000 and this does not really work (when we do new
+  // RestTemplate()
+  //            .getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}"...)
+
+
+  // One option you have is created an environment variable (in do and use an environment variable in here
+  //.getForEntity("http://localhost:8000/currency-exchange/from/{from}/to/{to}"...)
+  // or the other
+  // option is instead of localhost, you can say currency-exchange and using the service registry
+  // which is provided by Docker, internally you'd be able to use that to call the application.
+  // So, instead of localhost, currency-exchange
+
   @GetMapping("/currency-conversion/from/{from}/to/{to}/quantity/{quantity}")
   // http://localhost:8100/currency-conversion/from/USD/to/CAD/quantity/100
   public CurrencyConversion calculateConvertCurrencyRESTemplate(
@@ -32,7 +63,7 @@ public class Controller {
     ResponseEntity<CurrencyConversion> responseEntity =
         new RestTemplate()
             .getForEntity(
-                "http://localhost:8000/currency-exchange/from/{from}/to/{to}",
+                "http://currency-exchange:8000/currency-exchange/from/{from}/to/{to}",
                 CurrencyConversion.class,
                 uriVariable);
 

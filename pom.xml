@@ -91,6 +91,17 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <image>
+                        <name>mboukhar/microservice-${project.artifactId}:${project.version}</name>
+                    </image>
+                    <!--the default is always. Whenever you would build a container image,
+                    Spring Boot would fetch the base images and build the image for your specific project.
+                    And all these base images which are needed,
+                    spring-boot-maven-plugin by default would get them from the Docker registry.
+                    However, what we're configuring in here is to make it a little more efficient.
+                    What  we're saying is, only if the images are not present locally, go and pull them,
+                     otherwise use the images which are present locally.-->
+                    <pullPolicy>IF_NOT_PRESENT</pullPolicy>
                 </configuration>
             </plugin>
         </plugins>
